@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import carImg from "../assets/car3.png";
+import Footer from "../components/Footer";
 
 const Home = () => {
   return (
@@ -14,14 +15,15 @@ const Home = () => {
         {/* LEFT TEXT */}
         <div className="flex-1 text-center md:text-left">
 
-         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mt-[-10px]">
-  Drive Your <br className="hidden md:block" />
-  Dream Car
-</h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mt-[-10px]">
+            Drive Your <br className="hidden md:block" />
+            Dream Car
+          </h1>
+
           <p className="text-gray-300 text-base sm:text-lg md:text-xl mt-3 mb-6 max-w-xl mx-auto md:mx-0">
-  Rent premium luxury cars at affordable prices with DriveFleet.
-  Experience comfort, speed, and elegance.
-</p>
+            Rent premium luxury cars at affordable prices with DriveFleet.
+            Experience comfort, speed, and elegance.
+          </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
 
@@ -49,6 +51,9 @@ const Home = () => {
         </div>
 
       </section>
+
+      {/* FOOTER */}
+      <Footer />
 
     </div>
   );
