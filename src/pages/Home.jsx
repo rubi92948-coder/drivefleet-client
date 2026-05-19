@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
-import carImg from "../assets/car3.png";
+import carImg from "../assets/car0.png";
+import AvailableCars from "../components/AvailableCars";
 import Footer from "../components/Footer";
 
 const Home = () => {
@@ -52,8 +53,10 @@ const Home = () => {
 
       </section>
 
+      <AvailableCars />
+
       {/* FOOTER */}
-      <Footer />
+      <Footer />     
 
     </div>
   );
