@@ -1,36 +1,50 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import './index.css';
+import "./index.css";
 
-import Home from './pages/Home';
-import AddCar from './pages/AddCar';
-import Explore from './pages/Explore';
-import Bookings from './pages/Bookings';
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import AddCar from "./pages/AddCar";
+import Explore from "./pages/Explore";
+import Bookings from "./pages/Bookings";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <Layout>
+        <Home />
+      </Layout>
+    ),
   },
   {
     path: "/add-car",
-    element: <AddCar />,
+    element: (
+      <Layout>
+        <AddCar />
+      </Layout>
+    ),
   },
   {
-    path: "/explore",
-    element: <Explore />,
+    path: "/explore-cars",
+    element: (
+      <Layout>
+        <Explore />
+      </Layout>
+    ),
   },
   {
     path: "/bookings",
-    element: <Bookings />,
+    element: (
+      <Layout>
+        <Bookings />
+      </Layout>
+    ),
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );
