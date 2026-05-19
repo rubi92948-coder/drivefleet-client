@@ -37,7 +37,9 @@ const Navbar = () => {
           <Link
             to="/"
             className={`px-4 py-2 rounded-lg transition ${
-              isActive("/") ? "bg-orange-500 text-white" : "hover:text-orange-500"
+              isActive("/")
+                ? "bg-orange-500 text-white"
+                : "hover:text-orange-500"
             }`}
           >
             Home
@@ -66,6 +68,17 @@ const Navbar = () => {
           </Link>
 
           <Link
+            to="/my-added-cars"
+            className={`px-4 py-2 rounded-lg transition ${
+              isActive("/my-added-cars")
+                ? "bg-orange-500 text-white"
+                : "hover:text-orange-500"
+            }`}
+          >
+            My Added Cars
+          </Link>
+
+          <Link
             to="/bookings"
             className={`px-4 py-2 rounded-lg transition ${
               isActive("/bookings")
@@ -89,17 +102,21 @@ const Navbar = () => {
                 onClick={() => navigate("/signup")}
                 className="bg-orange-500 px-5 py-2 rounded-lg hover:bg-orange-600 transition"
               >
-                Regiter
+                Register
               </button>
             </>
           ) : (
             <>
               <div className="flex items-center gap-2">
+
                 <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold">
                   {user.name?.charAt(0).toUpperCase()}
                 </div>
 
-                <span className="text-sm">{user.name}</span>
+                <span className="text-sm">
+                  {user.name}
+                </span>
+
               </div>
 
               <button
@@ -112,7 +129,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile */}
+        {/* Mobile Button */}
         <div className="md:hidden">
           <button
             onClick={() => setOpen(!open)}
@@ -126,37 +143,113 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden bg-black px-6 pb-4 flex flex-col gap-3">
+        <div className="md:hidden bg-black px-6 pb-4 flex flex-col gap-3 border-t border-gray-800">
 
-          <Link to="/">Home</Link>
-          <Link to="/explore-cars">Explore Cars</Link>
-          <Link to="/add-car">Add Car</Link>
-          <Link to="/bookings">Bookings</Link>
+          <Link
+            onClick={() => setOpen(false)}
+            to="/"
+            className={
+              isActive("/")
+                ? "bg-orange-500 px-3 py-2 rounded-lg"
+                : ""
+            }
+          >
+            Home
+          </Link>
+
+          <Link
+            onClick={() => setOpen(false)}
+            to="/explore-cars"
+            className={
+              isActive("/explore-cars")
+                ? "bg-orange-500 px-3 py-2 rounded-lg"
+                : ""
+            }
+          >
+            Explore Cars
+          </Link>
+
+          <Link
+            onClick={() => setOpen(false)}
+            to="/add-car"
+            className={
+              isActive("/add-car")
+                ? "bg-orange-500 px-3 py-2 rounded-lg"
+                : ""
+            }
+          >
+            Add Car
+          </Link>
+
+          <Link
+            onClick={() => setOpen(false)}
+            to="/my-added-cars"
+            className={
+              isActive("/my-added-cars")
+                ? "bg-orange-500 px-3 py-2 rounded-lg"
+                : ""
+            }
+          >
+            My Added Cars
+          </Link>
+
+          <Link
+            onClick={() => setOpen(false)}
+            to="/bookings"
+            className={
+              isActive("/bookings")
+                ? "bg-orange-500 px-3 py-2 rounded-lg"
+                : ""
+            }
+          >
+            My Bookings
+          </Link>
 
           {!user ? (
             <>
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/login");
+                }}
                 className="bg-orange-500 px-5 py-2 rounded-lg"
               >
                 Login
               </button>
 
               <button
-                onClick={() => navigate("/signup")}
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/signup");
+                }}
                 className="bg-orange-500 px-5 py-2 rounded-lg"
               >
                 Register
               </button>
             </>
           ) : (
-            <button
-              onClick={handleLogout}
-              className="bg-orange-500 px-5 py-2 rounded-lg"
-            >
-              Logout
-            </button>
+            <>
+              <div className="flex items-center gap-2 py-2">
+
+                <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold">
+                  {user.name?.charAt(0).toUpperCase()}
+                </div>
+
+                <span className="text-sm">
+                  {user.name}
+                </span>
+
+              </div>
+
+              <button
+                onClick={handleLogout}
+                className="bg-orange-500 px-5 py-2 rounded-lg"
+              >
+                Logout
+              </button>
+            </>
           )}
+
         </div>
       )}
     </div>

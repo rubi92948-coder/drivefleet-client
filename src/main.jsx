@@ -14,6 +14,7 @@ import Bookings from "./pages/Bookings";
 import CarDetails from "./pages/CarDetails";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import MyAddedCars from "./pages/MyAddedCars";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,17 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
+  
+  {
+  path: "/my-added-cars",
+  element: (
+    <ProtectedRoute>
+      <Layout>
+        <MyAddedCars />
+      </Layout>
+    </ProtectedRoute>
+  ),
+},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

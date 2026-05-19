@@ -1,15 +1,16 @@
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { saveBooking } from "../utils/storage";
+import { getCars } from "../utils/carStorage";
 
-// demo data
-const cars = [
+// DEMO CARS
+const demoCars = [
   {
     id: 1,
     name: "BMW M4",
     price: "$80/day",
     img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80",
     description: "Luxury sports car with high performance and comfort.",
+    seats: 4,
+    type: "Sports",
   },
   {
     id: 2,
@@ -17,6 +18,8 @@ const cars = [
     price: "$95/day",
     img: "https://images.unsplash.com/photo-1617704548623-340376564e68?auto=format&fit=crop&w=1000&q=80",
     description: "Electric premium sedan with autopilot features.",
+    seats: 5,
+    type: "Electric",
   },
   {
     id: 3,
@@ -24,6 +27,8 @@ const cars = [
     price: "$120/day",
     img: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1000&q=80",
     description: "Supercar with aggressive design and speed.",
+    seats: 2,
+    type: "Luxury",
   },
 ];
 
@@ -31,9 +36,16 @@ const CarDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [toast, setToast] = useState(false);
+  // LOCAL STORAGE CARS
+  const addedCars = getCars();
 
-  const car = cars.find((c) => c.id === Number(id));
+  // MERGE ALL CARS
+  const allCars = [...demoCars, ...addedCars];
+
+  // FIND CAR
+  const car = allCars.find(
+    (c) => String(c.id) === String(id)
+  );
 
   if (!car) {
     return (
@@ -43,51 +55,20 @@ const CarDetails = () => {
     );
   }
 
-  const handleBook = () => {
-    saveBooking(car);
-    setToast(true);
-
-    setTimeout(() => {
-      setToast(false);
-    }, 2000);
-  };
-
   return (
     <div className="min-h-screen bg-[#020617] text-white px-4 py-10">
-
-      {/* TOAST */}
-      {toast && (
-        <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 w-64">
-          <div className="text-sm font-semibold">
-            Car Booked Successfully 🚗
-          </div>
-
-          <div className="mt-2 h-1 w-full bg-white/30 rounded overflow-hidden">
-            <div className="h-full bg-white animate-progress"></div>
-          </div>
-        </div>
-      )}
-
-      <style>
-        {`
-          @keyframes progress {
-            from { width: 0%; }
-            to { width: 100%; }
-          }
-          .animate-progress {
-            animation: progress 2s linear;
-          }
-        `}
-      </style>
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
 
         {/* IMAGE */}
-        <div>
+        <div className="w-full">
+
           <img
-            src={car.img}
+            src={car.img || car.image}
+            alt={car.name}
             className="w-full h-[300px] md:h-[450px] object-cover rounded-2xl shadow-lg"
           />
+
         </div>
 
         {/* INFO */}
@@ -101,16 +82,29 @@ const CarDetails = () => {
             {car.price}
           </p>
 
-          <p className="text-gray-300 mt-5">
+          <p className="text-gray-300 mt-5 leading-relaxed">
             {car.description}
           </p>
 
           {/* FEATURES */}
           <div className="grid grid-cols-2 gap-3 mt-6 text-sm text-gray-300">
-            <div className="bg-[#0f172a] p-3 rounded-lg">✔ Automatic</div>
-            <div className="bg-[#0f172a] p-3 rounded-lg">✔ Air Condition</div>
-            <div className="bg-[#0f172a] p-3 rounded-lg">✔ GPS</div>
-            <div className="bg-[#0f172a] p-3 rounded-lg">✔ 4 Seats</div>
+
+            <div className="bg-[#0f172a] p-3 rounded-lg">
+              ✔ {car.type}
+            </div>
+
+            <div className="bg-[#0f172a] p-3 rounded-lg">
+              ✔ {car.seats} Seats
+            </div>
+
+            <div className="bg-[#0f172a] p-3 rounded-lg">
+              ✔ Air Condition
+            </div>
+
+            <div className="bg-[#0f172a] p-3 rounded-lg">
+              ✔ GPS
+            </div>
+
           </div>
 
           {/* BUTTONS */}
@@ -123,10 +117,7 @@ const CarDetails = () => {
               Back
             </button>
 
-            <button
-              onClick={handleBook}
-              className="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-lg font-semibold"
-            >
+            <button className="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-lg font-semibold">
               Book Now
             </button>
 
