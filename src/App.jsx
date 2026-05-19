@@ -1,11 +1,19 @@
+import { Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
+import AddCar from "./pages/AddCar";
+import Explore from "./pages/Explore";
+import Bookings from "./pages/Bookings";
+
 function App() {
   return (
-    <div>
-      <h1 className="text-5xl font-bold text-red-500">
-        DriveFleet
-      </h1>
-    </div>
-  )
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/add-car" element={<AddCar />} />
+      <Route path="/explore" element={<Explore />} />
+      <Route path="/bookings" element={<Bookings />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
