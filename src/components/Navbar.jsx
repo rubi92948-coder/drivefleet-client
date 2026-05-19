@@ -89,7 +89,7 @@ const Navbar = () => {
                 onClick={() => navigate("/signup")}
                 className="bg-orange-500 px-5 py-2 rounded-lg hover:bg-orange-600 transition"
               >
-                Signup
+                Regiter
               </button>
             </>
           ) : (
@@ -146,7 +146,7 @@ const Navbar = () => {
                 onClick={() => navigate("/signup")}
                 className="bg-orange-500 px-5 py-2 rounded-lg"
               >
-                Signup
+                Register
               </button>
             </>
           ) : (

@@ -19,15 +19,8 @@ const Login = () => {
       return;
     }
 
-    if (
-      signupUser.email === email &&
-      signupUser.password === password
-    ) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify(signupUser)
-      );
-
+    if (signupUser.email === email && signupUser.password === password) {
+      localStorage.setItem("user", JSON.stringify(signupUser));
       navigate("/");
     } else {
       alert("Invalid credentials");
@@ -46,6 +39,7 @@ const Login = () => {
           Login
         </h1>
 
+        {/* EMAIL */}
         <input
           type="email"
           placeholder="Enter Email"
@@ -55,7 +49,6 @@ const Login = () => {
 
         {/* PASSWORD */}
         <div className="relative mb-6">
-
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Enter Password"
@@ -70,9 +63,9 @@ const Login = () => {
           >
             {showPassword ? "Hide" : "Show"}
           </button>
-
         </div>
 
+        {/* BUTTON */}
         <button
           type="submit"
           className="w-full bg-orange-500 hover:bg-orange-600 py-3 rounded-lg font-semibold"
@@ -80,13 +73,14 @@ const Login = () => {
           Login
         </button>
 
+        {/* SIGNUP LINK */}
         <p className="text-center mt-4 text-sm">
           Don’t have account?{" "}
           <span
             onClick={() => navigate("/signup")}
             className="text-orange-400 cursor-pointer"
           >
-            Sign up
+            Register
           </span>
         </p>
 
