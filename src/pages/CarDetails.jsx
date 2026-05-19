@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCars } from "../utils/carStorage";
+import { useEffect, useState } from "react";
 
 // DEMO CARS
 const demoCars = [
@@ -36,16 +37,23 @@ const CarDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // LOCAL STORAGE CARS
-  const addedCars = getCars();
+  const [car, setCar] = useState(null);
 
-  // MERGE ALL CARS
-  const allCars = [...demoCars, ...addedCars];
+  useEffect(() => {
+    const fetchCar = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/cars/${id}`
+        );
 
-  // FIND CAR
-  const car = allCars.find(
-    (c) => String(c.id) === String(id)
-  );
+        setCar(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchCar();
+  }, [id]);
 
   if (!car) {
     return (

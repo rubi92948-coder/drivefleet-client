@@ -4,7 +4,7 @@ import {
   getCars,
   deleteCar,
   updateCar,
-} from "../utils/carStorage";
+} from "../api/carsApi";
 
 const MyAddedCars = () => {
   const [cars, setCars] = useState([]);
@@ -12,23 +12,39 @@ const MyAddedCars = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setCars(getCars());
-  }, []);
-
-  // DELETE
-  const handleDelete = (id) => {
-    deleteCar(id);
-    setCars(getCars());
+  // 📥 Load Cars from backend
+  const loadCars = async () => {
+    try {
+      const data = await getCars();
+      setCars(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  // UPDATE SAVE
-  const handleUpdateSave = () => {
-    updateCar(editingCar);
+  useEffect(() => {
+    loadCars();
+  }, []);
 
-    setCars(getCars());
+  // 🗑 DELETE
+  const handleDelete = async (id) => {
+    try {
+      await deleteCar(id);
+      loadCars();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    setEditingCar(null);
+  // ✏️ UPDATE SAVE
+  const handleUpdateSave = async () => {
+    try {
+      await updateCar(editingCar);
+      setEditingCar(null);
+      loadCars();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -50,7 +66,7 @@ const MyAddedCars = () => {
 
             {cars.map((car) => (
               <div
-                key={car.id}
+                key={car._id}
                 className="bg-[#0f172a] rounded-xl overflow-hidden shadow-lg"
               >
 
@@ -80,7 +96,7 @@ const MyAddedCars = () => {
                     </p>
 
                     <button
-                      onClick={() => navigate(`/car/${car.id}`)}
+                      onClick={() => navigate(`/car/${car._id}`)}
                       className="border border-orange-500 text-orange-400 hover:bg-orange-500 hover:text-white px-3 py-1 rounded-lg text-xs transition"
                     >
                       View Details
@@ -99,7 +115,7 @@ const MyAddedCars = () => {
                     </button>
 
                     <button
-                      onClick={() => handleDelete(car.id)}
+                      onClick={() => handleDelete(car._id)}
                       className="border border-orange-500 text-orange-400 hover:bg-orange-500 hover:text-white py-2.5 rounded-lg text-sm font-semibold transition"
                     >
                       Delete
@@ -136,7 +152,6 @@ const MyAddedCars = () => {
                     })
                   }
                   className="w-full p-3 rounded-lg bg-[#1e293b] outline-none"
-                  placeholder="Car Name"
                 />
 
                 <input
@@ -149,7 +164,6 @@ const MyAddedCars = () => {
                     })
                   }
                   className="w-full p-3 rounded-lg bg-[#1e293b] outline-none"
-                  placeholder="Price"
                 />
 
                 <input
@@ -162,7 +176,6 @@ const MyAddedCars = () => {
                     })
                   }
                   className="w-full p-3 rounded-lg bg-[#1e293b] outline-none"
-                  placeholder="Type"
                 />
 
                 <input
@@ -175,7 +188,6 @@ const MyAddedCars = () => {
                     })
                   }
                   className="w-full p-3 rounded-lg bg-[#1e293b] outline-none"
-                  placeholder="Image URL"
                 />
 
                 <textarea
@@ -188,7 +200,6 @@ const MyAddedCars = () => {
                     })
                   }
                   className="w-full p-3 rounded-lg bg-[#1e293b] outline-none"
-                  placeholder="Description"
                 />
 
               </div>

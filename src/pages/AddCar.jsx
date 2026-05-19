@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { saveCar } from "../utils/carStorage";
+import { addCar } from "../api/carsApi";
 
 const AddCar = () => {
   const [toast, setToast] = useState(false);
@@ -20,30 +20,38 @@ const AddCar = () => {
     });
   };
 
-  const handleAddCar = (e) => {
+  const handleAddCar = async (e) => {
     e.preventDefault();
 
     const newCar = {
-      id: Date.now(),
-      ...formData,
+      name: formData.name,
+      price: formData.price,
+      type: formData.type,
+      image: formData.image,
+      seats: formData.seats,
+      description: formData.description,
     };
 
-    saveCar(newCar);
+    try {
+      await addCar(newCar);
 
-    setToast(true);
+      setToast(true);
 
-    setTimeout(() => {
-      setToast(false);
-    }, 2000);
+      setTimeout(() => {
+        setToast(false);
+      }, 2000);
 
-    setFormData({
-      name: "",
-      price: "",
-      type: "",
-      image: "",
-      seats: "",
-      description: "",
-    });
+      setFormData({
+        name: "",
+        price: "",
+        type: "",
+        image: "",
+        seats: "",
+        description: "",
+      });
+    } catch (err) {
+      alert("Error adding car");
+    }
   };
 
   return (
