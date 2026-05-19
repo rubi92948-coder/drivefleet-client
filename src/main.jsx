@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import AddCar from "./pages/AddCar";
 import Explore from "./pages/Explore";
 import Bookings from "./pages/Bookings";
+import CarDetails from "./pages/CarDetails";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
         <Bookings />
       </Layout>
     ),
+  },
+   {
+    path: "/car/:id",
+    element: <CarDetails />,
   },
 ]);
 

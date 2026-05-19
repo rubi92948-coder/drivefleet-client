@@ -1,16 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { saveBooking } from "../utils/storage";
 
 const Explore = () => {
   const [toast, setToast] = useState(false);
+  const navigate = useNavigate();
 
   const handleBook = (car) => {
     saveBooking(car);
     setToast(true);
 
-    setTimeout(() => {
-      setToast(false);
-    }, 2000);
+    setTimeout(() => setToast(false), 2000);
   };
 
   const cars = [
@@ -33,58 +33,61 @@ const Explore = () => {
 
       {/* TOAST */}
       {toast && (
-        <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 overflow-hidden">
-          <div className="text-sm font-semibold">Car Booked Successfully 🚗</div>
+        <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 w-64">
+          Car Booked Successfully 🚗
 
-          {/* TIMELINE BAR */}
-          <div className="mt-2 h-1 w-full bg-white/30 overflow-hidden rounded">
-            <div className="h-full bg-white animate-[grow_2s_linear]"></div>
+          <div className="mt-2 h-1 bg-white/30 rounded overflow-hidden">
+            <div className="h-full bg-white animate-progress"></div>
           </div>
-
-          <style>
-            {`
-              @keyframes grow {
-                from { width: 0%; }
-                to { width: 100%; }
-              }
-            `}
-          </style>
         </div>
       )}
+
+      <style>
+        {`
+          @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+          }
+          .animate-progress {
+            animation: progress 2s linear;
+          }
+        `}
+      </style>
 
       {/* TITLE */}
       <div className="text-center py-10">
         <h1 className="text-4xl md:text-5xl font-extrabold">
           <span className="text-orange-500">Explore</span> Cars
         </h1>
-        <p className="text-white-400 mt-2 text-bold">
-          Choose your dream car and book instantly
-        </p>
       </div>
 
-      {/* CAR GRID */}
+      {/* GRID */}
       <div className="max-w-7xl mx-auto px-4 pb-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {cars.map((car) => (
-          <div
-            key={car.id}
-            className="bg-[#0f172a] rounded-xl overflow-hidden shadow-lg hover:scale-105 transition duration-300"
-          >
-            <img src={car.img} alt={car.name} className="w-full h-48 object-cover" />
+          <div key={car.id} className="bg-[#0f172a] rounded-xl overflow-hidden shadow-lg">
+
+            <img src={car.img} className="w-full h-48 object-cover" />
 
             <div className="p-5">
+
               <h2 className="text-xl font-bold">{car.name}</h2>
-              <p className="text-gray-400 mt-1">{car.price}</p>
+              <p className="text-gray-400">{car.price}</p>
 
               <div className="flex gap-2 mt-4">
 
-                <button className="flex-1 border border-gray-600 hover:border-orange-500 hover:text-orange-400 px-3 py-2 rounded-lg text-sm">
+                {/* DETAILS FIXED */}
+                <button
+                  onClick={() => navigate(`/car/${car.id}`)}
+                  className="flex-1 border border-gray-600 hover:border-orange-500 px-3 py-2 rounded-lg text-sm"
+                >
                   Details
                 </button>
 
+                {/* BOOK */}
                 <button
                   onClick={() => handleBook(car)}
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 px-3 py-2 rounded-lg text-sm font-semibold"
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 px-3 py-2 rounded-lg text-sm"
                 >
                   Book Now
                 </button>
