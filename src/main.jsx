@@ -5,11 +5,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import Home from "./pages/Home";
 import AddCar from "./pages/AddCar";
 import Explore from "./pages/Explore";
 import Bookings from "./pages/Bookings";
 import CarDetails from "./pages/CarDetails";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const router = createBrowserRouter([
   {
@@ -20,33 +24,59 @@ const router = createBrowserRouter([
       </Layout>
     ),
   },
+
+  // PROTECTED ROUTES
   {
     path: "/add-car",
     element: (
-      <Layout>
-        <AddCar />
-      </Layout>
+      <ProtectedRoute>
+        <Layout>
+          <AddCar />
+        </Layout>
+      </ProtectedRoute>
     ),
   },
+
   {
     path: "/explore-cars",
     element: (
-      <Layout>
-        <Explore />
-      </Layout>
+      <ProtectedRoute>
+        <Layout>
+          <Explore />
+        </Layout>
+      </ProtectedRoute>
     ),
   },
+
   {
     path: "/bookings",
     element: (
-      <Layout>
-        <Bookings />
-      </Layout>
+      <ProtectedRoute>
+        <Layout>
+          <Bookings />
+        </Layout>
+      </ProtectedRoute>
     ),
   },
-   {
+
+  {
     path: "/car/:id",
-    element: <CarDetails />,
+    element: (
+      <ProtectedRoute>
+        <CarDetails />
+      </ProtectedRoute>
+    ),
+  },
+
+  // AUTH ROUTES
+  {
+    path: "/login",
+    element: <Login />,
+  },
+
+  {
+    path: "/signup",
+    element: <Signup />,
   },
 ]);
 
