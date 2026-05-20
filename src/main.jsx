@@ -68,8 +68,19 @@ const router = createBrowserRouter([
     ),
   },
 
+  // Existing route remains untouched
   {
     path: "/car/:id",
+    element: (
+      <ProtectedLayout>
+        <CarDetails />
+      </ProtectedLayout>
+    ),
+  },
+
+  // CRITICAL FIX: Added alias route for plural '/cars/:id' without changing any component code
+  {
+    path: "/cars/:id",
     element: (
       <ProtectedLayout>
         <CarDetails />
