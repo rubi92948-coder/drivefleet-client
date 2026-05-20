@@ -17,6 +17,7 @@ import CarDetails from "./pages/CarDetails";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import MyAddedCars from "./pages/MyAddedCars";
+import Profile from "./pages/Profile"; 
 
 // PUBLIC WRAPPER
 const PublicLayout = ({ children }) => (
@@ -81,6 +82,15 @@ const router = createBrowserRouter([
     element: (
       <ProtectedLayout>
         <MyAddedCars />
+      </ProtectedLayout>
+    ),
+  },
+
+  {
+    path: "/profile", 
+    element: (
+      <ProtectedLayout>
+        <Profile />
       </ProtectedLayout>
     ),
   },
