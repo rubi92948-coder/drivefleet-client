@@ -1,75 +1,72 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+import { loginUser } from "../api/authApi";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const signupUser = JSON.parse(localStorage.getItem("signupUser"));
+    try {
+      const res = await loginUser({ email, password });
 
-    if (!signupUser) {
-      alert("Please signup first");
-      navigate("/signup");
-      return;
-    }
+      const token = res.data.token;
 
-    if (signupUser.email === email && signupUser.password === password) {
-      localStorage.setItem("user", JSON.stringify(signupUser));
+      localStorage.setItem("user", JSON.stringify(token));
+      setUser(token);
+
+      toast.success("Login Successful 🚀");
       navigate("/");
-    } else {
-      alert("Invalid credentials");
+
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#020617] text-white">
 
-      <form
-        onSubmit={handleLogin}
-        className="w-96 bg-[#0f172a] p-8 rounded-xl shadow-lg"
-      >
+      <form onSubmit={handleLogin} className="w-96 bg-[#0f172a] p-8 rounded-xl">
 
         <h1 className="text-3xl font-bold text-center mb-6 text-orange-500">
           Login
         </h1>
 
-        {/* EMAIL */}
         <input
           type="email"
           placeholder="Enter Email"
-          className="w-full p-3 mb-4 rounded bg-black outline-none"
+          className="w-full p-3 mb-4 bg-black rounded"
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        {/* PASSWORD */}
         <div className="relative mb-6">
+
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Enter Password"
-            className="w-full p-3 rounded bg-black outline-none"
+            className="w-full p-3 bg-black rounded"
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button
-            type="button"
+          <span
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-3 text-sm text-orange-400"
+            className="absolute right-3 top-3 text-sm text-orange-400 cursor-pointer"
           >
             {showPassword ? "Hide" : "Show"}
-          </button>
+          </span>
+
         </div>
 
-        {/* BUTTON */}
-        <button
-          type="submit"
-          className="w-full bg-orange-500 hover:bg-orange-600 py-3 rounded-lg font-semibold"
-        >
+        <button className="w-full bg-orange-500 py-3 rounded">
           Login
         </button>
 

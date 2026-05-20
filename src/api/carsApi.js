@@ -2,23 +2,28 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:5000/api/cars";
 
-// ➕ Add Car
-export const addCar = (data) => {
-  return axios.post(BASE_URL, data);
-};
+// ➕ ADD
+export const addCar = (data) =>
+  axios.post(BASE_URL, data, {
+    withCredentials: true,
+  });
 
-// 📥 Get Cars
+// 📥 GET
 export const getCars = async () => {
-  const res = await axios.get(BASE_URL);
+  const res = await axios.get(BASE_URL, {
+    withCredentials: true,
+  });
   return res.data;
 };
 
-// 🗑 Delete Car
-export const deleteCar = (id) => {
-  return axios.delete(`${BASE_URL}/${id}`);
-};
+// 🗑 DELETE
+export const deleteCar = (id) =>
+  axios.delete(`${BASE_URL}/${id}`, {
+    withCredentials: true,
+  });
 
-// ✏️ Update Car
-export const updateCar = (id, data) => {
-  return axios.put(`${BASE_URL}/${id}`, data);
-};
+// ✏️ UPDATE
+export const updateCar = (id, data) =>
+  axios.put(`${BASE_URL}/${id}`, data, {
+    withCredentials: true,
+  });

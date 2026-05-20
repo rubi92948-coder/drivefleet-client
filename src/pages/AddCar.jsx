@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { addCar } from "../api/carsApi";
+import toast from "react-hot-toast";
 
 const AddCar = () => {
-  const [toast, setToast] = useState(false);
-
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -23,23 +22,10 @@ const AddCar = () => {
   const handleAddCar = async (e) => {
     e.preventDefault();
 
-    const newCar = {
-      name: formData.name,
-      price: formData.price,
-      type: formData.type,
-      image: formData.image,
-      seats: formData.seats,
-      description: formData.description,
-    };
-
     try {
-      await addCar(newCar);
+      await addCar(formData);
 
-      setToast(true);
-
-      setTimeout(() => {
-        setToast(false);
-      }, 2000);
+      toast.success("Car Added Successfully 🚗");
 
       setFormData({
         name: "",
@@ -49,90 +35,72 @@ const AddCar = () => {
         seats: "",
         description: "",
       });
+
     } catch (err) {
-      alert("Error adding car");
+      toast.error("Error adding car");
     }
   };
 
   return (
-    <div className="bg-[#020617] min-h-screen text-white px-4 py-10">
+    <div className="bg-[#020617] min-h-screen text-white flex items-start justify-center pt-0">
 
-      {/* TOAST */}
-      {toast && (
-        <div className="fixed top-5 right-5 bg-green-500 px-4 py-3 rounded-lg shadow-lg z-50">
-          Car Added Successfully 🚗
-        </div>
-      )}
+      <form
+        onSubmit={handleAddCar}
+        className="bg-[#0f172a] p-8 rounded-xl w-96 space-y-4 shadow-lg mt-4"
+      >
 
-      <div className="max-w-2xl mx-auto">
-
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-8">
-          <span className="text-orange-500">Add</span> Your Car
+        <h1 className="text-2xl font-bold text-center text-orange-500 mb-2">
+          Add Your Car 
         </h1>
 
-        <form
-          onSubmit={handleAddCar}
-          className="bg-[#0f172a] p-6 rounded-2xl shadow-lg space-y-4"
-        >
+        <input
+          name="name"
+          placeholder="Car Name"
+          onChange={handleChange}
+          className="w-full p-2 rounded bg-black outline-none"
+        />
 
-          <input
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-2.5 text-sm rounded-lg bg-[#1e293b] outline-none"
-            placeholder="Car Name"
-          />
+        <input
+          name="price"
+          placeholder="Price per day"
+          onChange={handleChange}
+          className="w-full p-2 rounded bg-black outline-none"
+        />
 
-          <input
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            className="w-full p-2.5 text-sm rounded-lg bg-[#1e293b] outline-none"
-            placeholder="Price per day"
-          />
+        <input
+          name="type"
+          placeholder="Car Type"
+          onChange={handleChange}
+          className="w-full p-2 rounded bg-black outline-none"
+        />
 
-          <input
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            className="w-full p-2.5 text-sm rounded-lg bg-[#1e293b] outline-none"
-            placeholder="Car Type"
-          />
+        <input
+          name="image"
+          placeholder="Image URL"
+          onChange={handleChange}
+          className="w-full p-2 rounded bg-black outline-none"
+        />
 
-          <input
-            name="image"
-            value={formData.image}
-            onChange={handleChange}
-            className="w-full p-2.5 text-sm rounded-lg bg-[#1e293b] outline-none"
-            placeholder="Image URL"
-          />
+        <input
+          name="seats"
+          placeholder="Seats"
+          onChange={handleChange}
+          className="w-full p-2 rounded bg-black outline-none"
+        />
 
-          <input
-            name="seats"
-            value={formData.seats}
-            onChange={handleChange}
-            className="w-full p-2.5 text-sm rounded-lg bg-[#1e293b] outline-none"
-            placeholder="Seats"
-          />
+        <textarea
+          name="description"
+          placeholder="Description"
+          onChange={handleChange}
+          className="w-full p-2 rounded bg-black outline-none"
+        />
 
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="w-full p-2.5 text-sm rounded-lg bg-[#1e293b] outline-none"
-            placeholder="Description"
-            rows="3"
-          />
+        <button className="w-full bg-orange-500 py-2 rounded hover:bg-orange-600 transition">
+          Add Car
+        </button>
 
-          <button
-            type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 py-2.5 rounded-lg font-semibold text-sm transition"
-          >
-            Add Car
-          </button>
+      </form>
 
-        </form>
-      </div>
     </div>
   );
 };

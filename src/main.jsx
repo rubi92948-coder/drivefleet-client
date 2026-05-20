@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import "./index.css";
 
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AuthProvider from "./context/AuthContext";
 
 import Home from "./pages/Home";
 import AddCar from "./pages/AddCar";
@@ -16,60 +18,73 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import MyAddedCars from "./pages/MyAddedCars";
 
+// PUBLIC WRAPPER
+const PublicLayout = ({ children }) => (
+  <Layout>{children}</Layout>
+);
+
+// PROTECTED WRAPPER
+const ProtectedLayout = ({ children }) => (
+  <ProtectedRoute>
+    <Layout>{children}</Layout>
+  </ProtectedRoute>
+);
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Layout>
+      <PublicLayout>
         <Home />
-      </Layout>
+      </PublicLayout>
     ),
   },
 
-  // PROTECTED ROUTES
   {
     path: "/add-car",
     element: (
-      <ProtectedRoute>
-        <Layout>
-          <AddCar />
-        </Layout>
-      </ProtectedRoute>
+      <ProtectedLayout>
+        <AddCar />
+      </ProtectedLayout>
     ),
   },
 
   {
     path: "/explore-cars",
     element: (
-      <ProtectedRoute>
-        <Layout>
-          <Explore />
-        </Layout>
-      </ProtectedRoute>
+      <ProtectedLayout>
+        <Explore />
+      </ProtectedLayout>
     ),
   },
 
   {
     path: "/bookings",
     element: (
-      <ProtectedRoute>
-        <Layout>
-          <Bookings />
-        </Layout>
-      </ProtectedRoute>
+      <ProtectedLayout>
+        <Bookings />
+      </ProtectedLayout>
     ),
   },
 
   {
     path: "/car/:id",
     element: (
-      <ProtectedRoute>
+      <ProtectedLayout>
         <CarDetails />
-      </ProtectedRoute>
+      </ProtectedLayout>
     ),
   },
 
-  // AUTH ROUTES
+  {
+    path: "/my-added-cars",
+    element: (
+      <ProtectedLayout>
+        <MyAddedCars />
+      </ProtectedLayout>
+    ),
+  },
+
   {
     path: "/login",
     element: <Login />,
@@ -79,19 +94,13 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
-  
-  {
-  path: "/my-added-cars",
-  element: (
-    <ProtectedRoute>
-      <Layout>
-        <MyAddedCars />
-      </Layout>
-    </ProtectedRoute>
-  ),
-},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <React.StrictMode>
+    <AuthProvider>
+      <RouterProvider router={router} />
+      <Toaster position="top-right" />
+    </AuthProvider>
+  </React.StrictMode>
 );
