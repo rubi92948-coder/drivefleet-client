@@ -1,19 +1,32 @@
+// SAVE BOOKING
 export const saveBooking = (car) => {
-  const old = JSON.parse(localStorage.getItem("bookings")) || [];
+  const bookings =
+    JSON.parse(localStorage.getItem("bookings")) || [];
 
-  // prevent duplicate
-  const exists = old.find((item) => item.id === car.id);
-  if (exists) return;
+  bookings.push(car);
 
-  localStorage.setItem("bookings", JSON.stringify([...old, car]));
+  localStorage.setItem(
+    "bookings",
+    JSON.stringify(bookings)
+  );
 };
 
+// GET BOOKINGS
 export const getBookings = () => {
   return JSON.parse(localStorage.getItem("bookings")) || [];
 };
 
+// REMOVE BOOKING
 export const removeBooking = (id) => {
-  const old = JSON.parse(localStorage.getItem("bookings")) || [];
-  const updated = old.filter((item) => item.id !== id);
-  localStorage.setItem("bookings", JSON.stringify(updated));
+  const bookings =
+    JSON.parse(localStorage.getItem("bookings")) || [];
+
+  const updatedBookings = bookings.filter(
+    (car) => car._id !== id
+  );
+
+  localStorage.setItem(
+    "bookings",
+    JSON.stringify(updatedBookings)
+  );
 };

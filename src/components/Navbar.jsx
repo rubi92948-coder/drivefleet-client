@@ -95,7 +95,7 @@ const Navbar = () => {
                 onClick={() => navigate("/login")}
                 className="bg-orange-500 px-5 py-2 rounded-lg hover:bg-orange-600 transition"
               >
-                Login
+                LogIn
               </button>
 
               <button
@@ -123,7 +123,7 @@ const Navbar = () => {
                 onClick={handleLogout}
                 className="bg-orange-500 px-5 py-2 rounded-lg hover:bg-orange-600 transition"
               >
-                Logout
+                LogOut
               </button>
             </>
           )}
@@ -214,7 +214,7 @@ const Navbar = () => {
                 }}
                 className="bg-orange-500 px-5 py-2 rounded-lg"
               >
-                Login
+                LogIn
               </button>
 
               <button
@@ -245,7 +245,7 @@ const Navbar = () => {
                 onClick={handleLogout}
                 className="bg-orange-500 px-5 py-2 rounded-lg"
               >
-                Logout
+                LogOut
               </button>
             </>
           )}

@@ -1,42 +1,10 @@
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-// DEMO CARS
-const demoCars = [
-  {
-    id: 1,
-    name: "BMW M4",
-    price: "$80/day",
-    img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80",
-    description: "Luxury sports car with high performance and comfort.",
-    seats: 4,
-    type: "Sports",
-  },
-  {
-    id: 2,
-    name: "Tesla Model S",
-    price: "$95/day",
-    img: "https://images.unsplash.com/photo-1617704548623-340376564e68?auto=format&fit=crop&w=1000&q=80",
-    description: "Electric premium sedan with autopilot features.",
-    seats: 5,
-    type: "Electric",
-  },
-  {
-    id: 3,
-    name: "Audi R8",
-    price: "$120/day",
-    img: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1000&q=80",
-    description: "Supercar with aggressive design and speed.",
-    seats: 2,
-    type: "Luxury",
-  },
-];
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CarDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [car, setCar] = useState(null);
 
   useEffect(() => {
@@ -45,7 +13,6 @@ const CarDetails = () => {
         const res = await axios.get(
           `http://localhost:5000/api/cars/${id}`
         );
-
         setCar(res.data);
       } catch (err) {
         console.log(err);
@@ -58,7 +25,7 @@ const CarDetails = () => {
   if (!car) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white bg-[#020617]">
-        Car Not Found
+        Car Not Found 😢
       </div>
     );
   }
@@ -69,14 +36,12 @@ const CarDetails = () => {
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
 
         {/* IMAGE */}
-        <div className="w-full">
-
+        <div>
           <img
-            src={car.img || car.image}
+            src={car.image}
             alt={car.name}
             className="w-full h-[300px] md:h-[450px] object-cover rounded-2xl shadow-lg"
           />
-
         </div>
 
         {/* INFO */}
@@ -87,14 +52,14 @@ const CarDetails = () => {
           </h1>
 
           <p className="text-orange-400 text-xl mt-3 font-semibold">
-            {car.price}
+            ${car.price}/day
           </p>
 
           <p className="text-gray-300 mt-5 leading-relaxed">
             {car.description}
           </p>
 
-          {/* FEATURES */}
+          {/* FEATURES (SAME AS 1ST DESIGN) */}
           <div className="grid grid-cols-2 gap-3 mt-6 text-sm text-gray-300">
 
             <div className="bg-[#0f172a] p-3 rounded-lg">
