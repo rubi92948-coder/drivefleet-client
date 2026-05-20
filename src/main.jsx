@@ -17,7 +17,8 @@ import CarDetails from "./pages/CarDetails";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import MyAddedCars from "./pages/MyAddedCars";
-import Profile from "./pages/Profile"; 
+import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound"; // NotFound পেজটি ইমপোর্ট করুন
 
 // PUBLIC WRAPPER
 const PublicLayout = ({ children }) => (
@@ -68,7 +69,6 @@ const router = createBrowserRouter([
     ),
   },
 
-  // Existing route remains untouched
   {
     path: "/car/:id",
     element: (
@@ -78,7 +78,6 @@ const router = createBrowserRouter([
     ),
   },
 
-  // CRITICAL FIX: Added alias route for plural '/cars/:id' without changing any component code
   {
     path: "/cars/:id",
     element: (
@@ -114,6 +113,12 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+
+  // 404 Not Found Route - এটি অবশ্যই সব রাউটের শেষে দিতে হয়
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

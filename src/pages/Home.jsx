@@ -1,10 +1,28 @@
+import { useEffect, useState } from "react";
 import carImg from "../assets/car0.png";
 import AvailableCars from "../components/AvailableCars";
 import { useNavigate } from "react-router-dom";
 import { ShieldCheck, Car, Headset, Tag } from "lucide-react";
 
+// লোডিং স্পিনার কম্পোনেন্ট
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center py-20">
+    <div className="relative">
+      <div className="w-12 h-12 rounded-full absolute border-4 border-dashed border-orange-500 animate-spin"></div>
+      <div className="w-12 h-12 rounded-full border-4 border-orange-900/30"></div>
+    </div>
+  </div>
+);
+
 const Home = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  // ডেটা লোডিং সিমুলেশন
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const features = [
     { icon: <ShieldCheck className="w-8 h-8 text-orange-500" />, title: "Verified Fleet", desc: "Every car in our platform undergoes rigorous safety and quality checks." },
@@ -106,8 +124,12 @@ const Home = () => {
       </section>
 
       {/* AVAILABLE CARS SECTION */}
-      <div className="border-t border-neutral-900/40 bg-gradient-to-b from-[#020617] to-[#090d16]">
-        <AvailableCars />
+      <div className="border-t border-neutral-900/40 bg-gradient-to-b from-[#020617] to-[#090d16] py-12">
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <AvailableCars />
+        )}
       </div>
 
     </div>
