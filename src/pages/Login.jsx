@@ -17,25 +17,43 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await loginUser({ email, password });
+      const res = await loginUser({
+        email,
+        password,
+      });
 
-      const token = res.data.token;
+      // ✅ FIXED
+      const userData = {
+        id: res.data.user.id,
+        token: res.data.token,
+      };
 
-      localStorage.setItem("user", JSON.stringify(token));
-      setUser(token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(userData)
+      );
+
+      setUser(userData);
 
       toast.success("Login Successful 🚀");
+
       navigate("/");
 
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
+      toast.error(
+        err.response?.data?.message ||
+        "Login failed"
+      );
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#020617] text-white">
 
-      <form onSubmit={handleLogin} className="w-96 bg-[#0f172a] p-8 rounded-xl">
+      <form
+        onSubmit={handleLogin}
+        className="w-96 bg-[#0f172a] p-8 rounded-xl"
+      >
 
         <h1 className="text-3xl font-bold text-center mb-6 text-orange-500">
           Login
@@ -58,7 +76,9 @@ const Login = () => {
           />
 
           <span
-            onClick={() => setShowPassword(!showPassword)}
+            onClick={() =>
+              setShowPassword(!showPassword)
+            }
             className="absolute right-3 top-3 text-sm text-orange-400 cursor-pointer"
           >
             {showPassword ? "Hide" : "Show"}
@@ -70,7 +90,6 @@ const Login = () => {
           Login
         </button>
 
-        {/* SIGNUP LINK */}
         <p className="text-center mt-4 text-sm">
           Don’t have account?{" "}
           <span

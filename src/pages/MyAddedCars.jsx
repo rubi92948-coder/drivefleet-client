@@ -4,27 +4,40 @@ import axios from "axios";
 const MyAddedCars = () => {
   const [cars, setCars] = useState([]);
 
-  const user = localStorage.getItem("user"); // token or id
+  // GET USER FROM LOCAL STORAGE
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const fetchCars = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/cars/user/${user}`
+          `http://localhost:5000/api/cars/user/${user.id}`
         );
+
         setCars(res.data);
+
       } catch (err) {
         console.log(err);
       }
     };
 
-    fetchCars();
+    if (user?.id) {
+      fetchCars();
+    }
+
   }, [user]);
 
+  // DELETE CAR
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cars/${id}`);
-      setCars(cars.filter((car) => car._id !== id));
+      await axios.delete(
+        `http://localhost:5000/api/cars/${id}`
+      );
+
+      setCars(
+        cars.filter((car) => car._id !== id)
+      );
+
     } catch (err) {
       console.log(err);
     }
@@ -37,30 +50,50 @@ const MyAddedCars = () => {
         My Added Cars
       </h1>
 
-      <div className="grid gap-6">
+      {cars.length === 0 ? (
+        <p className="text-center text-gray-400">
+          No cars found
+        </p>
+      ) : (
+        <div className="grid md:grid-cols-3 gap-6">
 
-        {cars.length === 0 ? (
-          <p className="text-center text-gray-400">No cars found</p>
-        ) : (
-          cars.map((car) => (
-            <div key={car._id} className="bg-[#0f172a] p-4 rounded">
+          {cars.map((car) => (
+            <div
+              key={car._id}
+              className="bg-[#0f172a] p-4 rounded-xl shadow-lg"
+            >
 
-              <img src={car.image} className="h-40 w-full object-cover" />
+              <img
+                src={car.image}
+                alt={car.name}
+                className="h-40 w-full object-cover rounded-lg"
+              />
 
-              <h2 className="mt-2">{car.name}</h2>
+              <h2 className="mt-3 text-xl font-bold">
+                {car.name}
+              </h2>
+
+              <p className="text-gray-400 mt-1">
+                ${car.price}/day
+              </p>
+
+              <p className="text-sm text-gray-500 mt-1">
+                {car.type} • {car.seats} Seats
+              </p>
 
               <button
                 onClick={() => handleDelete(car._id)}
-                className="bg-red-500 px-3 py-1 mt-2"
+                className="bg-red-500 hover:bg-red-600 px-3 py-2 mt-4 rounded-lg w-full"
               >
                 Delete
               </button>
 
             </div>
-          ))
-        )}
+          ))}
 
-      </div>
+        </div>
+      )}
+
     </div>
   );
 };
