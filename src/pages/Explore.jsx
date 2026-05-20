@@ -4,7 +4,7 @@ import axios from "axios";
 import { saveBooking } from "../utils/storage";
 import toast from "react-hot-toast";
 
-// স্পিনার কম্পোনেন্ট
+// Loading spinner component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-[400px]">
     <div className="relative">
@@ -21,6 +21,12 @@ const Explore = () => {
   
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("All");
+
+  // Booking modal states
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCar, setSelectedCar] = useState(null);
+  const [driverNeeded, setDriverNeeded] = useState(false);
+  const [specialNote, setSpecialNote] = useState("");
 
   const navigate = useNavigate();
 
@@ -54,14 +60,28 @@ const Explore = () => {
     setFilteredCars(result);
   }, [searchTerm, selectedType, cars]);
 
-  const handleBook = (car) => {
-    saveBooking(car);
-    toast.success(`${car.name} Booked Successfully! 🚗`);
+  // Open modal and set selected car
+  const handleOpenBooking = (car) => {
+    setSelectedCar(car);
+    setShowModal(true);
+  };
+
+  // Confirm booking and save to local storage
+  const handleConfirmBooking = () => {
+    const bookingData = { 
+      ...selectedCar, 
+      driverNeeded, 
+      specialNote, 
+      bookingDate: new Date().toISOString() 
+    };
+    saveBooking(bookingData);
+    toast.success(`${selectedCar.name} Booked Successfully! 🚗`);
+    setShowModal(false);
+    navigate("/bookings");
   };
 
   const carTypes = ["All", ...new Set(cars.map((car) => car.type).filter(Boolean))];
 
-  // এখানে স্পিনারটি ব্যবহার করা হয়েছে
   if (loading) {
     return (
       <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center">
@@ -114,7 +134,6 @@ const Explore = () => {
               <div className="px-6 pb-6 pt-5 flex-grow flex flex-col justify-between">
                 <div>
                   <h3 className="text-2xl font-bold text-white mb-2">{car.name}</h3>
-                  
                   <div className="flex flex-col gap-1.5 text-xs text-gray-400 mb-4">
                     <span className={`flex items-center gap-1.5 font-semibold ${car.availability ? "text-green-400" : "text-red-400"}`}>
                       <span className={`w-2 h-2 rounded-full ${car.availability ? "bg-green-500" : "bg-red-500"}`}></span>
@@ -130,7 +149,7 @@ const Explore = () => {
                   <div className="flex gap-3">
                     <button onClick={() => navigate(`/car/${car._id}`)} className="flex-1 border border-orange-500/30 py-2.5 rounded-xl text-sm font-semibold hover:bg-orange-500/10">Details</button>
                     <button
-                      onClick={() => handleBook(car)}
+                      onClick={() => handleOpenBooking(car)}
                       disabled={!car.availability}
                       className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition ${
                         !car.availability 
@@ -147,6 +166,35 @@ const Explore = () => {
           ))}
         </div>
       </div>
+
+      {/* BOOKING MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[#0f172a] p-8 rounded-2xl max-w-md w-full border border-gray-800 shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6">Book {selectedCar?.name}</h2>
+            
+            <div className="mb-4">
+              <label className="text-gray-400 text-sm">Driver Needed?</label>
+              <div className="flex gap-4 mt-2">
+                <button onClick={() => setDriverNeeded(true)} className={`px-6 py-2 rounded-lg font-semibold ${driverNeeded ? 'bg-orange-500' : 'bg-gray-700'}`}>Yes</button>
+                <button onClick={() => setDriverNeeded(false)} className={`px-6 py-2 rounded-lg font-semibold ${!driverNeeded ? 'bg-orange-500' : 'bg-gray-700'}`}>No</button>
+              </div>
+            </div>
+
+            <textarea 
+              className="w-full bg-[#020617] border border-gray-700 rounded-lg p-3 text-white outline-none focus:border-orange-500 mb-6" 
+              placeholder="Special notes (optional)..."
+              rows="3"
+              onChange={(e) => setSpecialNote(e.target.value)}
+            />
+
+            <div className="flex gap-3">
+              <button onClick={() => setShowModal(false)} className="flex-1 px-4 py-3 bg-gray-600 rounded-xl font-bold">Cancel</button>
+              <button onClick={handleConfirmBooking} className="flex-1 px-4 py-3 bg-orange-500 rounded-xl font-bold">Confirm Booking</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,101 +1,93 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { saveBooking } from "../utils/storage"; 
+import toast from "react-hot-toast";
 
 const CarDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [car, setCar] = useState(null);
+  const [driverNeeded, setDriverNeeded] = useState(false);
+  const [specialNote, setSpecialNote] = useState("");
 
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/cars/${id}`
-        );
+        const res = await axios.get(`http://localhost:5000/api/cars/${id}`);
         setCar(res.data);
       } catch (err) {
         console.log(err);
       }
     };
-
     fetchCar();
   }, [id]);
 
-  if (!car) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white bg-[#020617]">
-        Car Not Found 😢
-      </div>
-    );
-  }
+  const handleBooking = async () => {
+    try {
+      
+      await axios.put(`http://localhost:5000/api/cars/book/${id}`);
+
+      
+      const bookingData = {
+        ...car,
+        driverNeeded,
+        specialNote,
+        bookingDate: new Date().toISOString()
+      };
+      saveBooking(bookingData);
+      
+      toast.success(`${car.name} booked successfully!`);
+      navigate("/bookings");
+    } catch (err) {
+      toast.error("Booking failed!");
+    }
+  };
+
+  if (!car) return <div className="min-h-screen flex items-center justify-center text-white bg-[#020617]">Loading...</div>;
 
   return (
     <div className="min-h-screen bg-[#020617] text-white px-4 py-10">
-
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-
-        {/* IMAGE */}
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
         <div>
-          <img
-            src={car.image}
-            alt={car.name}
-            className="w-full h-[300px] md:h-[450px] object-cover rounded-2xl shadow-lg"
-          />
+          <img src={car.image} alt={car.name} className="w-full h-[450px] object-cover rounded-2xl shadow-lg" />
         </div>
 
-        {/* INFO */}
         <div>
+          <h1 className="text-5xl font-extrabold">{car.name}</h1>
+          <p className="text-orange-400 text-xl mt-3 font-semibold">${car.price}/day</p>
+          <p className="text-gray-300 mt-5">{car.description}</p>
+          {/* কার্ডের ভেতর বা ডিটেইলস পেজে এভাবে দেখান */}
+<p className="text-gray-400">
+  Total Bookings: <span className="text-orange-500 font-bold">{car.bookingCount}</span>
+</p>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold">
-            {car.name}
-          </h1>
-
-          <p className="text-orange-400 text-xl mt-3 font-semibold">
-            ${car.price}/day
-          </p>
-
-          <p className="text-gray-300 mt-5 leading-relaxed">
-            {car.description}
-          </p>
-
-          {/* FEATURES (SAME AS 1ST DESIGN) */}
-          <div className="grid grid-cols-2 gap-3 mt-6 text-sm text-gray-300">
-
-            <div className="bg-[#0f172a] p-3 rounded-lg">
-              ✔ {car.type}
+          <div className="mt-8 space-y-4 bg-[#0f172a] p-6 rounded-xl border border-gray-800">
+            <div className="flex items-center gap-6">
+              <span className="text-gray-300">Driver Needed?</span>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" checked={driverNeeded} onChange={() => setDriverNeeded(true)} className="accent-orange-500"/> Yes
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" checked={!driverNeeded} onChange={() => setDriverNeeded(false)} className="accent-orange-500"/> No
+                </label>
+              </div>
             </div>
 
-            <div className="bg-[#0f172a] p-3 rounded-lg">
-              ✔ {car.seats} Seats
-            </div>
-
-            <div className="bg-[#0f172a] p-3 rounded-lg">
-              ✔ Air Condition
-            </div>
-
-            <div className="bg-[#0f172a] p-3 rounded-lg">
-              ✔ GPS
-            </div>
-
+            <textarea 
+              placeholder="Special notes (optional)..."
+              value={specialNote}
+              onChange={(e) => setSpecialNote(e.target.value)}
+              className="w-full bg-[#020617] border border-gray-700 rounded-lg p-3 text-white outline-none focus:border-orange-500"
+              rows="3"
+            />
           </div>
 
-          {/* BUTTONS */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-8">
-
-            <button
-              onClick={() => navigate(-1)}
-              className="border border-gray-500 hover:border-orange-500 px-5 py-3 rounded-lg"
-            >
-              Back
-            </button>
-
-            <button className="bg-orange-500 hover:bg-orange-600 px-5 py-3 rounded-lg font-semibold">
-              Book Now
-            </button>
-
+          <div className="flex gap-3 mt-8">
+            <button onClick={() => navigate(-1)} className="border border-gray-500 px-8 py-3 rounded-lg hover:bg-gray-800">Back</button>
+            <button onClick={handleBooking} className="bg-orange-500 hover:bg-orange-600 px-8 py-3 rounded-lg font-bold">Book Now</button>
           </div>
-
         </div>
       </div>
     </div>
