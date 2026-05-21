@@ -11,8 +11,8 @@ const AddCar = () => {
     type: "",
     image: "",
     seats: "",
-    location: "",      // New Field
-    availability: true, // New Field (default true)
+    location: "",      
+    availability: true, 
     description: "",
   });
 
