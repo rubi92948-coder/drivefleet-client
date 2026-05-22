@@ -6,13 +6,22 @@ import toast from "react-hot-toast";
 const AvailableCars = () => {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAvailableCars = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/cars");
+        const res = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/api/cars`,
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+          }
+        );
+
         setCars(res.data);
       } catch (err) {
         console.error("Error fetching available cars:", err);
@@ -59,7 +68,6 @@ const AvailableCars = () => {
               {/* IMAGE CONTAINER WITH FLOATING BADGE */}
               <div className="p-6 bg-slate-950/40 relative overflow-hidden group">
                 
-                {/* FIXED UI: Super sleek white badge with a thin orange outline */}
                 <span className="absolute top-4 right-4 z-10 bg-white text-slate-950 text-[10px] font-extrabold px-2.5 py-0.5 rounded uppercase tracking-wider shadow-md border-2 border-orange-500">
                   {car.type}
                 </span>
@@ -87,7 +95,8 @@ const AvailableCars = () => {
 
                 <div className="flex items-center justify-between mt-4">
                   <span className="text-orange-500 font-extrabold text-xl">
-                    ${car.price}<span className="text-xs text-gray-400 font-normal">/day</span>
+                    ${car.price}
+                    <span className="text-xs text-gray-400 font-normal">/day</span>
                   </span>
 
                   {/* VIEW DETAILS BUTTON */}

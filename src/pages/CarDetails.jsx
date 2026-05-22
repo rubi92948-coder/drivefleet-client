@@ -4,6 +4,7 @@ import axios from "axios";
 import { saveBooking } from "../utils/storage"; 
 import toast from "react-hot-toast";
 
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
 const CarDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const CarDetails = () => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/cars/${id}`);
+        const res = await axios.get(`${BASE_URL}/api/cars/${id}`);
         setCar(res.data);
       } catch (err) {
         console.log(err);
@@ -26,8 +27,7 @@ const CarDetails = () => {
   const handleBooking = async () => {
     try {
       
-      await axios.put(`http://localhost:5000/api/cars/book/${id}`);
-
+      await axios.put(`${BASE_URL}/api/cars/book/${id}`);
       
       const bookingData = {
         ...car,
@@ -57,7 +57,7 @@ const CarDetails = () => {
           <h1 className="text-5xl font-extrabold">{car.name}</h1>
           <p className="text-orange-400 text-xl mt-3 font-semibold">${car.price}/day</p>
           <p className="text-gray-300 mt-5">{car.description}</p>
-          {/* কার্ডের ভেতর বা ডিটেইলস পেজে এভাবে দেখান */}
+         
 <p className="text-gray-400">
   Total Bookings: <span className="text-orange-500 font-bold">{car.bookingCount}</span>
 </p>

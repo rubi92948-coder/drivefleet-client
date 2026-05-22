@@ -28,6 +28,9 @@ const Login = () => {
         token: res.data.token,
       };
 
+      // 🔥 NEW FIX (IMPORTANT)
+      localStorage.setItem("token", res.data.token);
+
       localStorage.setItem(
         "user",
         JSON.stringify(userData)

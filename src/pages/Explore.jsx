@@ -33,7 +33,7 @@ const Explore = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/cars");
+        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/cars`);
         setCars(res.data);
         setFilteredCars(res.data);
       } catch (err) {
